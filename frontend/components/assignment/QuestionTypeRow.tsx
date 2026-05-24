@@ -1,6 +1,7 @@
+// QuestionTypeRow.tsx
 'use client';
 
-import { X } from 'lucide-react';
+import { ChevronDown, X } from 'lucide-react';
 import { QuestionConfig, QuestionType } from '../../types/index';
 import CounterInput from './CounterInput';
 
@@ -27,13 +28,17 @@ export default function QuestionTypeRow({
     showRemove,
 }: QuestionTypeRowProps) {
     return (
-        <div className="flex items-center gap-3">
-            {/* Type Dropdown */}
+        <div className="flex items-center gap-4">
+            {/* Dropdown */}
             <div className="relative flex-1">
                 <select
                     value={config.type}
-                    onChange={(e) => onChange({ type: e.target.value as QuestionType })}
-                    className="w-full appearance-none border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 bg-white pr-8 focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    onChange={(e) =>
+                        onChange({
+                            type: e.target.value as QuestionType,
+                        })
+                    }
+                    className="w-full appearance-none bg-[#F5F5F5] border-none rounded-full px-5 py-3 pr-10 text-sm font-medium text-[#2C2C2C] focus:outline-none cursor-pointer"
                 >
                     {QUESTION_TYPE_OPTIONS.map((opt) => (
                         <option key={opt.value} value={opt.value}>
@@ -41,25 +46,35 @@ export default function QuestionTypeRow({
                         </option>
                     ))}
                 </select>
-                <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs">▾</span>
+
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-black">
+                    <ChevronDown size={16} strokeWidth={2.2} />
+                </span>
             </div>
 
-            {/* Remove */}
-            {showRemove && (
+            {/* Remove Button */}
+            {showRemove ? (
                 <button
                     type="button"
                     onClick={onRemove}
-                    className="p-1.5 text-gray-400 hover:text-red-400 transition-colors"
+                    className="text-[#666] hover:text-red-500 transition-colors"
                 >
-                    <X size={15} />
+                    <X size={16} strokeWidth={2} />
                 </button>
+            ) : (
+                <div className="w-4" />
             )}
 
-            {/* Count */}
-            <CounterInput value={config.count} onChange={(val) => onChange({ count: val })} />
+            {/* Counters */}
+            <CounterInput
+                value={config.count}
+                onChange={(val) => onChange({ count: val })}
+            />
 
-            {/* Marks */}
-            <CounterInput value={config.marks} onChange={(val) => onChange({ marks: val })} />
+            <CounterInput
+                value={config.marks}
+                onChange={(val) => onChange({ marks: val })}
+            />
         </div>
     );
 }

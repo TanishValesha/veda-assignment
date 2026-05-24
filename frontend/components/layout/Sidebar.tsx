@@ -51,7 +51,7 @@ export default function Sidebar() {
                         }}
                     >
                         <div
-                            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-full text-white text-md font-semibold transition-all hover:opacity-90 active:scale-[0.98]"
+                            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-full text-white text-md font-semibold transition-all hover:scale-102 active:scale-[0.98]"
                             style={{ background: '#1a1a1a' }}
                         >
                             <Image src={sparklesIcon} alt="" width={18} height={18} />

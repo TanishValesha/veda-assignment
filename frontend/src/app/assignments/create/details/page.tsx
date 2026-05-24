@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import AppLayout from '../../../../../components/layout/AppLayout';
 import { useAssignmentStore } from '../../../../../store/assignmentStore';
 import { createAssignment } from '../../../../../services/api';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const GRADE_OPTIONS = [
     'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5',
@@ -47,16 +48,16 @@ export default function AssignmentDetailsPage() {
 
     return (
         <AppLayout title="Assignment" showBack>
-            <div className="max-w-2xl mx-auto">
-
-                {/* Page Title */}
-                <div className="flex items-center gap-2 mb-5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-                    <div>
-                        <h1 className="text-base font-semibold text-gray-900">Create Assignment</h1>
-                        <p className="text-xs text-gray-400">Set up a new assignment for your students</p>
-                    </div>
+            {/* Page Title */}
+            <div className="flex items-center gap-2 mb-8 px-8">
+                <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                <div>
+                    <h1 className="text-md font-bold text-gray-900">Create Assignment</h1>
+                    <p className="text-sm text-gray-400">Set up a new assignment for your students</p>
                 </div>
+            </div>
+            <div className="max-w-6xl mx-auto mt-10 pb-10">
+
 
                 {/* Progress Bar */}
                 <div className="w-full h-1 bg-gray-200 rounded-full mb-6">
@@ -67,13 +68,13 @@ export default function AssignmentDetailsPage() {
                 <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-5">
 
                     <div>
-                        <h2 className="text-sm font-semibold text-gray-900">Assignment Information</h2>
-                        <p className="text-xs text-gray-400">Tell us more about this assignment</p>
+                        <h2 className="text-xl font-bold text-gray-900">Assignment Information</h2>
+                        <p className="text-sm text-gray-400">Tell us more about this assignment</p>
                     </div>
 
                     {/* Title */}
                     <div>
-                        <label className="text-xs font-medium text-gray-600 mb-1.5 block">
+                        <label className="text-md font-medium text-black mb-1.5 block">
                             Assignment Title
                         </label>
                         <input
@@ -87,14 +88,14 @@ export default function AssignmentDetailsPage() {
 
                     {/* Subject */}
                     <div>
-                        <label className="text-xs font-medium text-gray-600 mb-1.5 block">
+                        <label className="text-md font-medium text-black mb-1.5 block">
                             Subject
                         </label>
                         <div className="relative">
                             <select
                                 value={form.subject}
                                 onChange={(e) => setField('subject', e.target.value)}
-                                className="w-full appearance-none border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 bg-white focus:outline-none focus:ring-1 focus:ring-orange-400 pr-8"
+                                className="w-full focus:outline-none appearance-none border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 bg-white pr-8"
                             >
                                 <option value="">Select Subject</option>
                                 {SUBJECT_OPTIONS.map((s) => (
@@ -107,14 +108,14 @@ export default function AssignmentDetailsPage() {
 
                     {/* Grade Level */}
                     <div>
-                        <label className="text-xs font-medium text-gray-600 mb-1.5 block">
+                        <label className="text-md font-medium text-black mb-1.5 block">
                             Grade Level
                         </label>
                         <div className="relative">
                             <select
                                 value={form.gradeLevel}
                                 onChange={(e) => setField('gradeLevel', e.target.value)}
-                                className="w-full appearance-none border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 bg-white focus:outline-none focus:ring-1 focus:ring-orange-400 pr-8"
+                                className="w-full appearance-none border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 bg-white focus:outline-none pr-8"
                             >
                                 <option value="">Select Grade</option>
                                 {GRADE_OPTIONS.map((g) => (
@@ -136,9 +137,10 @@ export default function AssignmentDetailsPage() {
                     <button
                         type="button"
                         onClick={() => router.back()}
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                        style={{ boxShadow: '0 1px 4px 0 rgba(0,0,0,0.06)' }}
                     >
-                        ← Previous
+                        <ArrowLeft /> Previous
                     </button>
                     <button
                         type="button"
@@ -146,7 +148,7 @@ export default function AssignmentDetailsPage() {
                         disabled={loading}
                         className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-50"
                     >
-                        {loading ? 'Generating...' : 'Next →'}
+                        {loading ? 'Generating...' : 'Next'}<ArrowRight />
                     </button>
                 </div>
             </div>

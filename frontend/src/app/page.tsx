@@ -29,7 +29,7 @@ export default function DashboardPage() {
 
         {/* CTA */}
         <Link href="/assignments/create">
-          <button className="flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-full text-md font-medium hover:bg-gray-800 transition-colors">
+          <button className="flex items-center cursor-pointer hover:scale-102 transition-all  gap-2 bg-gray-900 text-white px-6 py-3 rounded-full text-md font-medium active:scale-[0.98] duration-500">
             <Plus size={20} className='font-extrabold' />
             Create Your First Assignment
           </button>

@@ -1,3 +1,4 @@
+// CounterInput.tsx
 'use client';
 
 interface CounterInputProps {
@@ -6,23 +7,29 @@ interface CounterInputProps {
     min?: number;
 }
 
-export default function CounterInput({ value, onChange, min = 1 }: CounterInputProps) {
+export default function CounterInput({
+    value,
+    onChange,
+    min = 1,
+}: CounterInputProps) {
     return (
-        <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-white">
+        <div className="flex items-center bg-[#F5F5F5] rounded-full px-2 py-2 min-w-[88px] justify-between">
             <button
                 type="button"
-                className="px-2.5 py-1.5 text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors"
                 onClick={() => onChange(Math.max(min, value - 1))}
+                className="w-7 h-7 flex items-center justify-center rounded-full text-[#B0B0B0] hover:bg-white transition-all text-base font-medium"
             >
                 −
             </button>
-            <span className="px-3 py-1.5 text-sm font-medium text-gray-800 min-w-[32px] text-center border-x border-gray-200">
+
+            <span className="text-sm font-medium text-[#2C2C2C] min-w-[18px] text-center">
                 {value}
             </span>
+
             <button
                 type="button"
-                className="px-2.5 py-1.5 text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors"
                 onClick={() => onChange(value + 1)}
+                className="w-7 h-7 flex items-center justify-center rounded-full text-[#B0B0B0] hover:bg-white transition-all text-base font-medium"
             >
                 +
             </button>

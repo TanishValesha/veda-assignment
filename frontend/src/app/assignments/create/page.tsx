@@ -1,11 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Plus, Mic, Calendar } from 'lucide-react';
+import { Plus, Mic, Calendar, ChevronLast, ChevronLeft, ArrowLeft, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import AppLayout from '../../../../components/layout/AppLayout';
 import FileUpload from '../../../../components/assignment/FileUpload';
 import QuestionTypeRow from '../../../../components/assignment/QuestionTypeRow';
 import { useAssignmentStore } from '../../../../store/assignmentStore';
+import calendarIcon from '../../../../public/icons/calendar.png';
+import micIcon from '../../../../public/icons/mic.png';
 
 export default function CreateAssignmentPage() {
     const router = useRouter();
@@ -21,7 +24,6 @@ export default function CreateAssignmentPage() {
     const totalMarks = form.questionConfig.reduce((s, q) => s + q.count * q.marks, 0);
 
     function handleNext() {
-        // basic validation
         if (!form.dueDate) return alert('Please select a due date');
         if (form.questionConfig.length === 0) return alert('Add at least one question type');
         router.push('/assignments/create/details');
@@ -29,60 +31,62 @@ export default function CreateAssignmentPage() {
 
     return (
         <AppLayout title="Assignment" showBack>
-            <div className="max-w-4xl mx-auto">
-                {/* Page Title */}
-                <div className="flex items-center gap-2 mb-5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-                    <div>
-                        <h1 className="text-base font-semibold text-gray-900">Create Assignment</h1>
-                        <p className="text-xs text-gray-400">Set up a new assignment for your students</p>
-                    </div>
+            <div className="flex items-center gap-2 mb-8 px-8">
+                <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                <div>
+                    <h1 className="text-md font-bold text-gray-900">Create Assignment</h1>
+                    <p className="text-sm text-gray-400">Set up a new assignment for your students</p>
                 </div>
+            </div>
+            <div className="max-w-6xl mx-auto mt-10 pb-10">
+
 
                 {/* Progress Bar */}
-                <div className="w-full h-1 bg-gray-200 rounded-full mb-6">
-                    <div className="h-1 bg-gray-800 rounded-full w-1/2" />
+                <div className="w-full h-1 bg-gray-200 rounded-full mb-5">
+                    <div className="h-1 bg-gray-700 rounded-full w-1/2" />
                 </div>
 
-                {/* Card */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-6">
-
-                    {/* Assignment Details Header */}
+                {/* Main Card */}
+                <div
+                    className="bg-white rounded-2xl p-6 space-y-5"
+                    style={{ boxShadow: '0 2px 16px 0 rgba(0,0,0,0.06)', border: '1px solid #F0F0F0' }}
+                >
+                    {/* Header */}
                     <div>
-                        <h2 className="text-sm font-semibold text-gray-900">Assignment Details</h2>
-                        <p className="text-xs text-gray-400">Basic information about your assignment</p>
+                        <h2 className="text-lg font-semibold text-gray-900">Assignment Details</h2>
+                        <p className="text-sm text-gray-400 mt-0.5">Basic information about your assignment</p>
                     </div>
 
                     {/* File Upload */}
                     <FileUpload onFileSelect={(file) => console.log(file)} />
-                    <p className="text-xs text-gray-400 text-center -mt-4">
+                    <p className="text-sm text-gray-400 text-center -mt-3">
                         Upload images of your preferred document/image
                     </p>
 
                     {/* Due Date */}
                     <div>
-                        <label className="text-xs font-medium text-gray-600 mb-1.5 block">Due Date</label>
+                        <label className="text-md font-semibold text-black mb-1.5 block">Due Date</label>
                         <div className="relative">
                             <input
                                 type="date"
                                 value={form.dueDate}
                                 onChange={(e) => setField('dueDate', e.target.value)}
                                 placeholder="DD-MM-YYYY"
-                                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 bg-white focus:outline-none focus:ring-1 focus:ring-orange-400 pr-10"
+                                className="w-full border border-gray-200 rounded-3xl px-3 py-3 text-md text-gray-700 focus:outline-none focus:ring-1 focus:ring-orange-400"
                             />
-                            <Calendar size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                         </div>
                     </div>
 
-                    {/* Question Types Header */}
-                    <div className="grid grid-cols-[1fr_auto_auto] gap-3 items-center">
-                        <span className="text-xs font-medium text-gray-600">Question Type</span>
-                        <span className="text-xs font-medium text-gray-600 w-24 text-center">No. of Questions</span>
-                        <span className="text-xs font-medium text-gray-600 w-24 text-center">Marks</span>
+                    {/* Question Type Header */}
+                    <div className="grid items-center" style={{ gridTemplateColumns: '1fr 24px 100px 100px' }}>
+                        <span className="text-md font-semibold text-black">Question Type</span>
+                        <span />
+                        <span className="text-md font-semibold text-black text-center">No. of Questions</span>
+                        <span className="text-md font-semibold text-black text-center">Marks</span>
                     </div>
 
-                    {/* Question Type Rows */}
-                    <div className="space-y-3">
+                    {/* Question Rows */}
+                    <div className="space-y-2.5">
                         {form.questionConfig.map((config, index) => (
                             <QuestionTypeRow
                                 key={index}
@@ -98,53 +102,62 @@ export default function CreateAssignmentPage() {
                     <button
                         type="button"
                         onClick={addQuestionConfig}
-                        className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                        className="flex items-center gap-2 text-sm text-gray-700 font-medium hover:text-gray-900 transition-colors"
                     >
-                        <div className="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center">
-                            <Plus size={13} className="text-white" />
+                        <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center font-bold">
+                            <Plus size={20} className="text-white" />
                         </div>
                         Add Question Type
                     </button>
 
                     {/* Totals */}
                     <div className="text-right space-y-0.5">
-                        <p className="text-xs text-gray-500">Total Questions : <span className="font-semibold text-gray-800">{totalQuestions}</span></p>
-                        <p className="text-xs text-gray-500">Total Marks : <span className="font-semibold text-gray-800">{totalMarks}</span></p>
+                        <p className="text-md text-black">
+                            Total Questions : <span className="text-black">{totalQuestions}</span>
+                        </p>
+                        <p className="text-md text-black">
+                            Total Marks : <span className="text-black">{totalMarks}</span>
+                        </p>
                     </div>
 
                     {/* Additional Instructions */}
                     <div>
-                        <label className="text-xs font-medium text-gray-600 mb-1.5 block">
-                            Additional Information <span className="text-gray-400">(For better output)</span>
+                        <label className="text-md font-semibold text-black mb-1.5 block">
+                            Additional Information{' '}
+                            <span className="text-black font-bold">(For better output)</span>
                         </label>
                         <div className="relative">
                             <textarea
                                 value={form.additionalInstructions}
                                 onChange={(e) => setField('additionalInstructions', e.target.value)}
                                 placeholder="e.g Generate a question paper for 3 hour exam duration..."
-                                rows={3}
-                                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 bg-white focus:outline-none focus:ring-1 focus:ring-orange-400 resize-none pr-10"
+                                rows={5}
+                                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-600 placeholder:text-gray-600 bg-white focus:outline-none focus:ring-1 focus:ring-orange-300 resize-none pr-10"
                             />
-                            <Mic size={16} className="absolute right-3 bottom-3 text-gray-400" />
+                            <div className="absolute right-8 bottom-8">
+                                <Image src={micIcon} alt="mic" width={18} height={18} className="object-contain" />
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Footer Buttons */}
-                <div className="flex justify-between mt-6">
+                {/* Footer */}
+                <div className="flex justify-between mt-5">
                     <button
                         type="button"
                         onClick={() => router.back()}
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                        style={{ boxShadow: '0 1px 4px 0 rgba(0,0,0,0.06)' }}
                     >
-                        ← Previous
+                        <ArrowLeft />
+                        Previous
                     </button>
                     <button
                         type="button"
                         onClick={handleNext}
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors"
+                        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors"
                     >
-                        Next →
+                        Next<ArrowRight />
                     </button>
                 </div>
             </div>

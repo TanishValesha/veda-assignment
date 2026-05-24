@@ -12,6 +12,9 @@
 }
 
 body {
+  margin: 0;
+  padding: 0;
   font-family: var(--font-bricolage);
-  background: #f4f4f5;
+  background: linear-gradient(180deg, #eeeeee 0%, #dadada 100%);
+  min-height: 100vh;
 }

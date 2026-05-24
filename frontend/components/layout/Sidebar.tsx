@@ -2,22 +2,24 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-    LayoutGrid,
-    Users,
-    FileText,
-    Wrench,
-    BookOpen,
-    Settings,
-    Sparkles,
-} from 'lucide-react';
+import Image from 'next/image';
+import logo from '../../public/logo.png';
+import homeIcon from '../../public/icons/home.png';
+import groupsIcon from '../../public/icons/groups.png';
+import assignmentsIcon from '../../public/icons/assignment.png';
+import toolkitIcon from '../../public/icons/book.png';
+import libraryIcon from '../../public/icons/library.png';
+// import settingsIcon from '@/assets/icons/settings.png';
+import sparklesIcon from '../../public/icons/sparkles.png';
+import schoolAvatar from '../../public/icons/avatar.png';
+import { Settings } from 'lucide-react';
 
 const navItems = [
-    { label: 'Home', icon: LayoutGrid, href: '/' },
-    { label: 'My Groups', icon: Users, href: '/groups' },
-    { label: 'Assignments', icon: FileText, href: '/assignments' },
-    { label: "AI Teacher's Toolkit", icon: Wrench, href: '/toolkit' },
-    { label: 'My Library', icon: BookOpen, href: '/library' },
+    { label: 'Home', icon: homeIcon, href: '/' },
+    { label: 'My Groups', icon: groupsIcon, href: '/groups' },
+    { label: 'Assignments', icon: assignmentsIcon, href: '/assignments' },
+    { label: "AI Teacher's Toolkit", icon: toolkitIcon, href: '/toolkit' },
+    { label: 'My Library', icon: libraryIcon, href: '/library' },
 ];
 
 export default function Sidebar() {
@@ -25,46 +27,63 @@ export default function Sidebar() {
 
     return (
         <aside
-            className="fixed left-0 top-0 h-screen flex flex-col bg-white border-r border-gray-100 z-10"
-            style={{ width: '280px' }}
+            className="fixed left-2 top-2 h-screen flex flex-col bg-white z-20 rounded-[16px]"
+            style={{
+                width: '280px',
+                boxShadow: '40px 2px 40px 2px rgba(0,0,0,0.06)',
+            }}
         >
             {/* Logo */}
             <div className="px-5 py-5">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-                        style={{ background: 'linear-gradient(135deg, #E8581A, #F97316)' }}>
-                        <span className="text-white font-bold text-sm">V</span>
-                    </div>
-                    <span className="font-bold text-gray-900 text-lg">VedaAI</span>
+                    <Image src={logo} alt="VedaAI" width={40} height={40} className="object-contain" />
+                    <span className="font-bold text-gray-900 text-2xl tracking-tight">VedaAI</span>
                 </div>
             </div>
 
             {/* Create Assignment Button */}
-            <div className="px-4 mb-6">
+            <div className="px-5 mt-6 mb-16">
                 <Link href="/assignments/create">
-                    <button
-                        className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-full text-white text-sm font-medium transition-opacity hover:opacity-90"
-                        style={{ background: 'linear-gradient(135deg, #1a1a1a, #333)' }}
+                    <div
+                        className="w-full p-[3px] rounded-full"
+                        style={{
+                            background: 'linear-gradient(180deg, #FF7950 0%, #C0350A 100%)',
+                        }}
                     >
-                        <Sparkles size={15} />
-                        Create Assignment
-                    </button>
+                        <div
+                            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-full text-white text-md font-semibold transition-all hover:opacity-90 active:scale-[0.98]"
+                            style={{ background: '#1a1a1a' }}
+                        >
+                            <Image src={sparklesIcon} alt="" width={18} height={18} />
+                            Create Assignment
+                        </div>
+                    </div>
                 </Link>
             </div>
 
             {/* Nav Items */}
             <nav className="flex-1 px-3 space-y-0.5">
-                {navItems.map(({ label, icon: Icon, href }) => {
-                    const isActive = pathname === href;
+                {navItems.map(({ label, icon, href }) => {
+                    const isActive = pathname === href ||
+                        (href === '/assignments' && pathname.startsWith('/assignments'));
+
                     return (
                         <Link key={href} href={href}>
                             <div
-                                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm cursor-pointer transition-colors ${isActive
-                                    ? 'bg-gray-100 text-gray-900 font-medium'
-                                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                                className={`flex items-center gap-3 px-6 py-2.5 rounded-xl text-md cursor-pointer transition-all duration-150
+                  ${isActive
+                                        ? 'bg-gray-100 text-gray-900 font-semibold'
+                                        : 'text-gray-500 font-medium hover:bg-gray-50 hover:text-gray-800'
                                     }`}
                             >
-                                <Icon size={17} />
+                                <Image
+                                    src={icon}
+                                    alt={label}
+                                    width={20}
+                                    height={20}
+                                    className={`object-contain transition-opacity ${isActive ? 'opacity-100' : 'opacity-50'
+                                        }`}
+                                />
                                 {label}
                             </div>
                         </Link>
@@ -72,23 +91,33 @@ export default function Sidebar() {
                 })}
             </nav>
 
-            {/* Bottom */}
-            <div className="px-3 pb-4 space-y-0.5">
+            {/* Bottom Section */}
+            <div className="px-3 pb-5">
+                {/* Settings */}
                 <Link href="/settings">
-                    <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-500 hover:bg-gray-50 cursor-pointer">
-                        <Settings size={17} />
+                    <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-md text-gray-500 font-medium hover:bg-gray-50 hover:text-gray-800 cursor-pointer transition-all duration-150 mb-2">
+                        <Settings size={18} className="text-gray-400" />
                         Settings
                     </div>
                 </Link>
 
-                {/* School Profile */}
-                <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-gray-50 mt-2">
-                    <div className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center overflow-hidden">
-                        <span className="text-xs font-bold text-orange-600">DPS</span>
+                {/* School Profile Card */}
+                <div
+                    className="flex items-center gap-3 px-3 py-3 rounded-2xl mt-1 cursor-pointer transition-all duration-150 hover:brightness-95"
+                    style={{ background: '#F5F5F5' }}
+                >
+                    <div className="w-[59px] h-[59px] rounded-full overflow-hidden shrink-0">
+                        <Image
+                            src={schoolAvatar}
+                            alt="School"
+                            width={59}
+                            height={59}
+                            className="object-cover w-full h-full"
+                        />
                     </div>
                     <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-gray-900 truncate">Delhi Public School</p>
-                        <p className="text-xs text-gray-400 truncate">Bokaro Steel City</p>
+                        <p className="text-md font-bold text-gray-900 truncate">Delhi Public School</p>
+                        <p className="text-sm text-gray-400 truncate">Bokaro Steel City</p>
                     </div>
                 </div>
             </div>

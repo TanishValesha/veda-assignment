@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+:root {
+  --sidebar-width: 280px;
+  --orange: #e8581a;
+  --orange-light: #f97316;
+  --font-bricolage: "Bricolage Grotesque", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-bricolage);
+  background: #f4f4f5;
+}

@@ -1,0 +1,50 @@
+"use client";
+
+import { useEffect, useRef, useCallback } from "react";
+
+interface WsMessage {
+  event: string;
+  status?: string;
+  message?: string;
+  paper?: any;
+  pdfUrl?: string;
+  assignmentId?: string;
+}
+
+interface UseWebSocketProps {
+  assignmentId: string | null;
+  onMessage: (msg: WsMessage) => void;
+}
+
+export function useWebSocket({ assignmentId, onMessage }: UseWebSocketProps) {
+  const wsRef = useRef<WebSocket | null>(null);
+
+  const connect = useCallback(() => {
+    if (!assignmentId) return;
+
+    const ws = new WebSocket(
+      `${process.env.NEXT_PUBLIC_WS_URL}?assignmentId=${assignmentId}`,
+    );
+
+    ws.onopen = () => console.log("WS connected");
+
+    ws.onmessage = (e) => {
+      try {
+        const data = JSON.parse(e.data);
+        onMessage(data);
+      } catch {
+        console.error("WS parse error");
+      }
+    };
+
+    ws.onerror = (e) => console.error("WS error", e);
+    ws.onclose = () => console.log("WS disconnected");
+
+    wsRef.current = ws;
+  }, [assignmentId, onMessage]);
+
+  useEffect(() => {
+    connect();
+    return () => wsRef.current?.close();
+  }, [connect]);
+}

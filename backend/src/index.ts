@@ -7,10 +7,19 @@ import { startWorker } from "./queues/worker";
 import { WebSocketServer } from "ws";
 import { wsManager } from "./ws/wsManager";
 import { ENV } from "./config/env";
+import cors from "cors";
 
 const app: Application = express();
 const server = http.createServer(app);
 const PORT = ENV.PORT || 3000;
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 app.use("/api/assignments", assignmentRoutes);

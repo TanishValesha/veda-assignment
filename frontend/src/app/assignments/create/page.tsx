@@ -31,10 +31,10 @@ export default function CreateAssignmentPage() {
 
     return (
         <AppLayout title="Assignment" showBack>
-            <div className="flex items-center gap-2 mb-8 px-8">
+            <div className="flex items-center gap-4 mb-8 px-8">
                 <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
                 <div>
-                    <h1 className="text-md font-bold text-gray-900">Create Assignment</h1>
+                    <h1 className="text-xl font-bold text-gray-900">Create Assignment</h1>
                     <p className="text-sm text-gray-400">Set up a new assignment for your students</p>
                 </div>
             </div>

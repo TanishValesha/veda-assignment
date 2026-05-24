@@ -34,16 +34,12 @@ export function startWorker() {
 
         // 4. Save to MongoDB
         await QuestionPaper.create(paper);
-        const pdfPath = await generatePDF(paper);
-        await Assignment.findByIdAndUpdate(assignmentId, {
-          status: "completed",
-          pdfPath,
-        });
+        const pdfUrl = await generatePDF(paper);
 
         // 5. Update assignment status
         await Assignment.findByIdAndUpdate(assignmentId, {
           status: "completed",
-          pdfPath,
+          pdfUrl,
         });
 
         // 6. Notify frontend: done
@@ -52,7 +48,7 @@ export function startWorker() {
           status: "completed",
           assignmentId,
           paper,
-          pdfPath: `/api/assignments/${assignmentId}/pdf`,
+          pdfUrl,
         });
 
         return paper;

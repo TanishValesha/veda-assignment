@@ -2,8 +2,9 @@ import path from "path";
 import PDFDocument from "pdfkit";
 import fs from "fs";
 import { GeneratedPaper } from "../types";
+import { cloudinary } from "../config/cloudinary";
 
-const OUTPUT_DIR = path.join(__dirname, "../../generated-pdfs");
+const TMP_DIR = path.join(__dirname, "../../tmp-pdfs");
 
 // font directory mapping
 const FONTS_DIR = path.resolve(__dirname, "../assets/fonts");
@@ -11,8 +12,8 @@ const FONT_REGULAR = path.join(FONTS_DIR, "Inter-Regular.otf");
 const FONT_BOLD = path.join(FONTS_DIR, "Inter-Bold.otf");
 const FONT_ITALIC = path.join(FONTS_DIR, "Inter-LightItalic.otf");
 
-if (!fs.existsSync(OUTPUT_DIR)) {
-  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+if (!fs.existsSync(TMP_DIR)) {
+  fs.mkdirSync(TMP_DIR, { recursive: true });
 }
 
 const DIFFICULTY_LABEL: Record<string, string> = {
@@ -21,9 +22,25 @@ const DIFFICULTY_LABEL: Record<string, string> = {
   challenging: "Challenging",
 };
 
+// Uploads the generated PDF to Cloudinary and returns the secure URL
 export async function generatePDF(paper: GeneratedPaper): Promise<string> {
+  const tmpPath = await generateLocalPDF(paper);
+
+  const result = await cloudinary.uploader.upload(tmpPath, {
+    folder: "vedaai/papers",
+    public_id: `paper_${paper.assignmentId}`,
+    resource_type: "raw",
+    format: "pdf",
+  });
+
+  fs.unlinkSync(tmpPath);
+
+  return result.secure_url;
+}
+
+export async function generateLocalPDF(paper: GeneratedPaper): Promise<string> {
   return new Promise((resolve, reject) => {
-    const filePath = path.join(OUTPUT_DIR, `${paper.assignmentId}.pdf`);
+    const filePath = path.join(TMP_DIR, `${paper.assignmentId}.pdf`);
     const doc = new PDFDocument({ margin: 50, size: "A4" });
     const stream = fs.createWriteStream(filePath);
 

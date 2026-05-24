@@ -5,7 +5,7 @@ export interface IAssignment extends Document, CreateAssignmentDTO {
   jobId?: string;
   status: JobStatus;
   createdAt: Date;
-  pdfPath?: String;
+  pdfUrl?: String;
 }
 
 const AssignmentSchema = new Schema<IAssignment>(
@@ -32,7 +32,7 @@ const AssignmentSchema = new Schema<IAssignment>(
       enum: ["waiting", "active", "completed", "failed"],
       default: "waiting",
     },
-    pdfPath: String,
+    pdfUrl: String,
   },
   { timestamps: true },
 );

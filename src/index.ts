@@ -1,17 +1,40 @@
-import express, { Application, Request, Response } from 'express';
-import { connectDB } from './config/db';
+import express, { Application, Request, Response } from "express";
+import http from "http";
+import { connectDB } from "./config/db";
+import assignmentRoutes from "./routes/assignment.routes";
+import { connectRedis } from "./config/redis";
+import { startWorker } from "./queues/worker";
+import { WebSocketServer } from "ws";
+import { wsManager } from "./ws/wsManager";
+import { ENV } from "./config/env";
 
 const app: Application = express();
-const PORT = process.env.PORT || 3000;
+const server = http.createServer(app);
+const PORT = ENV.PORT || 3000;
 
-connectDB();
+app.use(express.json());
+app.use("/api/assignments", assignmentRoutes);
 
-// Basic route
-app.get('/', (req: Request, res: Response) => {
-  res.json({ message: 'Hello from Express & TypeScript!' });
+// Health check route
+app.get("/health", (_, res: Response) => {
+  res.json({ success: true, message: "Server is running!" });
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+const wss = new WebSocketServer({ server });
+wsManager.init(wss);
+
+async function init() {
+  await connectDB();
+  await connectRedis();
+  startWorker();
+
+  // Start the server
+  server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+init().catch((err) => {
+  console.error("Failed to initialize server:", err);
+  process.exit(1);
 });

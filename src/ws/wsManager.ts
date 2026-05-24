@@ -11,7 +11,7 @@ class WsManager {
 
   init(wss: WebSocketServer) {
     wss.on("connection", (ws: WebSocket, req: IncomingMessage) => {
-      // ws://host/ws?assignmentId=xxx
+      // ws://host?assignmentId=xxx
       const url = new URL(req.url || "", `http://localhost`);
       const assignmentId = url.searchParams.get("assignmentId");
 

@@ -1,10 +1,11 @@
 import { Worker, Job } from "bullmq";
 import { ENV } from "../config/env";
-import { generateQuestionPaper } from "../services/ai";
+import { generateQuestionPaper } from "../services/aiService";
 import { Assignment } from "../models/Assignment";
 import { QuestionPaper } from "../models/QuestionPaper";
 import { wsManager } from "../ws/wsManager";
 import { CreateAssignmentDTO } from "../types";
+import { generatePDF } from "../services/pdfService";
 
 export interface AssignmentJobData {
   assignmentId: string;
@@ -33,10 +34,16 @@ export function startWorker() {
 
         // 4. Save to MongoDB
         await QuestionPaper.create(paper);
+        const pdfPath = await generatePDF(paper);
+        await Assignment.findByIdAndUpdate(assignmentId, {
+          status: "completed",
+          pdfPath,
+        });
 
         // 5. Update assignment status
         await Assignment.findByIdAndUpdate(assignmentId, {
           status: "completed",
+          pdfPath,
         });
 
         // 6. Notify frontend: done
@@ -45,6 +52,7 @@ export function startWorker() {
           status: "completed",
           assignmentId,
           paper,
+          pdfPath: `/api/assignments/${assignmentId}/pdf`,
         });
 
         return paper;

@@ -66,6 +66,7 @@ ${sectionBreakdown}
 Rules:
 - difficulty must be one of: "easy", "moderate", "challenging"
 - For mcq, include an "options" array with 4 items
+- for answer field, provide correct option for mcq and correct answer for others
 - Do NOT include any explanation or markdown, only raw JSON
 
 Respond with this exact JSON structure:

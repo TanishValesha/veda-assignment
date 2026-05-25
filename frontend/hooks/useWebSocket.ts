@@ -6,6 +6,7 @@ interface WsMessage {
   event: string;
   status?: string;
   message?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   paper?: any;
   pdfUrl?: string;
   assignmentId?: string;

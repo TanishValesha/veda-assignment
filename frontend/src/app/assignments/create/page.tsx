@@ -26,8 +26,17 @@ export default function CreateAssignmentPage() {
     const totalMarks = form.questionConfig.reduce((s, q) => s + q.count * q.marks, 0);
 
     function handleNext() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const selectedDate = new Date(form.dueDate);
+
         if (!form.dueDate) {
             return setError('Please select a due date');
+        }
+
+        if (selectedDate < today) {
+            return setError('Due date cannot be in the past');
         }
 
         if (form.questionConfig.length === 0) {
@@ -84,6 +93,7 @@ export default function CreateAssignmentPage() {
                                 type="date"
                                 value={form.dueDate}
                                 onChange={(e) => setField('dueDate', e.target.value)}
+                                min={new Date().toISOString().split('T')[0]}
                                 placeholder="DD-MM-YYYY"
                                 className="w-full border border-gray-200 rounded-3xl px-3 py-3 text-md text-gray-700 focus:outline-none focus:ring-1 focus:ring-orange-400"
                             />

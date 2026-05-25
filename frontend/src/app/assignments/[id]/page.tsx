@@ -17,6 +17,7 @@ export default function AssignmentOutputPage() {
     const [subject, setSubject] = useState('');
     const [gradeLevel, setGradeLevel] = useState('');
     const [paper, setPaper] = useState<any>(null);
+    const [shouldConnectWs, setShouldConnectWs] = useState(false);
 
     // on refresh, try fetching existing paper
     useEffect(() => {
@@ -28,10 +29,15 @@ export default function AssignmentOutputPage() {
                     setSubject(res.data.subject || '');
                     setGradeLevel(res.data.gradeLevel || '');
                     setStatus('completed');
+
+                    setShouldConnectWs(false);
+                } else {
+                    setShouldConnectWs(true);
                 }
             })
             .catch(() => {
-                // paper not ready yet, WS will handle it
+                // only connect WS if paper not found
+                setShouldConnectWs(true);
             });
     }, [id]);
 
@@ -54,7 +60,7 @@ export default function AssignmentOutputPage() {
         }
     }, []);
 
-    useWebSocket({ assignmentId: id, onMessage: handleWsMessage, skip: status === 'completed' });
+    useWebSocket({ assignmentId: id, onMessage: handleWsMessage, skip: !shouldConnectWs });
 
     return (
         <AppLayout title="Assignment" showBack>

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import AppLayout from '../../../components/layout/AppLayout';
 import AssignmentCard from '../../../components/assignment/AssignmentCard';
 import { deleteAssignment, getAllAssignments } from '../../../services/api';
-import { Search, SlidersHorizontal, Plus, Funnel } from 'lucide-react';
+import { Search, SlidersHorizontal, Plus, Funnel, Loader2 } from 'lucide-react';
 import NoAssignment from '../../../components/assignment/NoAssignment';
 import { useAssignmentStore } from '../../../store/assignmentStore';
 import { toast } from "sonner";
@@ -114,8 +114,8 @@ export default function AssignmentsPage() {
 
                 {/* Grid */}
                 {loading ? (
-                    <div className="flex justify-center py-20">
-                        <div className="w-6 h-6 border-2 border-orange-400 border-t-transparent rounded-full animate-spin" />
+                    <div className="flex h-screen pb-20 text-center justify-center items-center">
+                        <Loader2 size={48} className="text-orange-400 animate-spin" />
                     </div>
                 ) : assignments.length === 0 ? (
                     <NoAssignment />

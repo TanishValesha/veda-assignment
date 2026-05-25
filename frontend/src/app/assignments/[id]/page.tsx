@@ -118,12 +118,17 @@ export default function AssignmentOutputPage() {
 
                 {/* Loading */}
                 {(status === 'idle' || status === 'waiting' || status === 'active') && (
-                    <div className="bg-white rounded-2xl p-16 flex flex-col items-center justify-center gap-4 shadow-sm border border-gray-100">
-                        <Loader2 size={32} className="text-orange-500 animate-spin" />
-                        <p className="text-sm font-medium text-gray-700">
-                            {status === 'idle' ? 'Loading...' : message}
-                        </p>
-                        <p className="text-xs text-gray-400">This usually takes 10–20 seconds</p>
+                    <div className="flex min-h-screen items-center justify-center">
+                        <div className="bg-transparent rounded-2xl px-16 flex flex-col items-center justify-center gap-4 pb-20">
+                            <Loader2
+                                size={48}
+                                className="text-orange-500 animate-spin"
+                            />
+
+                            <p className="text-sm font-medium text-gray-700 text-center">
+                                {status === 'idle' ? 'Loading...' : message}
+                            </p>
+                        </div>
                     </div>
                 )}
 

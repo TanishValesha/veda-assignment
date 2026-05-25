@@ -138,12 +138,12 @@ export default function Sidebar() {
             {/* Bottom Section */}
             <div className="px-3 pb-5">
                 {/* Settings */}
-                <Link href="/settings">
+                <div>
                     <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-md text-gray-500 font-medium hover:bg-gray-50 hover:text-gray-800 cursor-pointer transition-all duration-150 mb-2">
                         <Settings size={18} className="text-gray-400" />
                         Settings
                     </div>
-                </Link>
+                </div>
 
                 {/* School Profile Card */}
                 <div

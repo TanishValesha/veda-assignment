@@ -15,10 +15,7 @@ const PORT = ENV.PORT || 3000;
 
 app.use(
   cors({
-    origin:
-      ENV.NODE_ENV === "production"
-        ? process.env.FRONTEND_URL
-        : "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://veda-assignment.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),

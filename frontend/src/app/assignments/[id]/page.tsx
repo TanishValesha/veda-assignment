@@ -7,11 +7,11 @@ import { getQuestionPaper } from '../../../../services/api';
 import { useWebSocket } from '../../../../hooks/useWebSocket';
 import { FilePlusCorner, Loader2, RefreshCw } from 'lucide-react';
 
-type PageStatus = 'waiting' | 'active' | 'completed' | 'failed';
+type PageStatus = 'idle' | 'waiting' | 'active' | 'completed' | 'failed';
 
 export default function AssignmentOutputPage() {
     const { id } = useParams<{ id: string }>();
-    const [status, setStatus] = useState<PageStatus>('waiting');
+    const [status, setStatus] = useState<PageStatus>('idle');
     const [message, setMessage] = useState('Waiting for generation to start...');
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
     const [subject, setSubject] = useState('');
@@ -37,6 +37,17 @@ export default function AssignmentOutputPage() {
     useEffect(() => {
         fetchPaper();
     }, [fetchPaper]);
+
+    // Fallback - This ensures even if WS and initial fetch both miss, polling catches it within 4 seconds.
+    useEffect(() => {
+        if (status === 'completed') return;
+
+        const interval = setInterval(() => {
+            fetchPaper();
+        }, 4000);
+
+        return () => clearInterval(interval);
+    }, [status, fetchPaper]);
 
     // on refresh, try fetching existing paper
     useEffect(() => {
@@ -106,10 +117,12 @@ export default function AssignmentOutputPage() {
                 )}
 
                 {/* Loading */}
-                {(status === 'waiting' || status === 'active') && (
+                {(status === 'idle' || status === 'waiting' || status === 'active') && (
                     <div className="bg-white rounded-2xl p-16 flex flex-col items-center justify-center gap-4 shadow-sm border border-gray-100">
                         <Loader2 size={32} className="text-orange-500 animate-spin" />
-                        <p className="text-sm font-medium text-gray-700">{message}</p>
+                        <p className="text-sm font-medium text-gray-700">
+                            {status === 'idle' ? 'Loading...' : message}
+                        </p>
                         <p className="text-xs text-gray-400">This usually takes 10–20 seconds</p>
                     </div>
                 )}

@@ -17,7 +17,7 @@ export default function Header({ title = 'Assignment', showBack = false }: Heade
             {/* Left */}
             <div className="flex items-center gap-2.5">
                 {showBack && (
-                    <Link href="/">
+                    <Link href="/assignments">
                         <button className="p-1 rounded-lg hover:bg-gray-50 transition-colors">
                             <ArrowLeft size={24} className="text-black" />
                         </button>

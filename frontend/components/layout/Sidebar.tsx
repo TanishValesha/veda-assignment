@@ -91,7 +91,7 @@ export default function Sidebar() {
                                     />
                                     {label}
 
-                                    {label === "Assignments" && (
+                                    {label === "Assignments" && assignmentsCount > 0 && (
                                         <div className='pl-8'>
                                             <div className="min-w-[22px] h-[22px] flex px-4 py-1 items-center justify-center rounded-full bg-[#FF6A2B] text-white text-sm font-semibold leading-none">
                                                 {assignmentsCount}
@@ -122,7 +122,7 @@ export default function Sidebar() {
                                 />
                                 {label}
 
-                                {label === "Assignments" && (
+                                {label === "Assignments" && assignmentsCount > 0 && (
                                     <div className='pl-8'>
                                         <div className="min-w-[22px] h-[22px] flex px-4 py-1 items-center justify-center rounded-full bg-[#FF6A2B] text-white text-sm font-semibold leading-none">
                                             {assignmentsCount}

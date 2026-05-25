@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { MoreVertical } from 'lucide-react';
+import { useMediaQuery } from "react-responsive";
+
 
 interface AssignmentCardProps {
     id: string;
@@ -23,6 +25,10 @@ export default function AssignmentCard({
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
+    const isMobile = useMediaQuery({
+        maxWidth: 768,
+    });
+
     useEffect(() => {
         function handleClickOutside(e: MouseEvent) {
             if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -35,16 +41,15 @@ export default function AssignmentCard({
 
     return (
         <div
-            className="bg-white rounded-2xl px-5 py-4 flex flex-col justify-between relative"
+            className={`bg-white rounded-2xl px-5 py-4 flex flex-col justify-between relative ${isMobile ? `min-h-[116px]` : `min-h-[162px]`}`}
             style={{
                 boxShadow: '0 1px 8px 0 rgba(0,0,0,0.06)',
                 border: '1px solid #F0F0F0',
-                minHeight: '162px',
             }}
         >
             {/* Top Row */}
             <div className="flex items-start justify-between mb-4">
-                <h3 className="text-2xl font-bold text-gray-900 leading-snug flex-1 pr-2">
+                <h3 className="md:text-2xl text-xl font-bold text-gray-900 leading-snug flex-1 pr-2">
                     {title}
                 </h3>
 
@@ -52,9 +57,13 @@ export default function AssignmentCard({
                 <div className="relative" ref={menuRef}>
                     <button
                         onClick={() => setMenuOpen((p) => !p)}
-                        className="p-1 rounded-lg hover:bg-gray-50 transition-colors text-gray-400"
+                        className="p-1 rounded-lg hover:bg-gray-50 transition-colors md:text-gray-400 text-black"
                     >
-                        <MoreVertical size={16} />
+                        {isMobile ? (
+                            <MoreVertical size={24} />
+                        ) : (
+                            <MoreVertical size={16} />
+                        )}
                     </button>
 
                     {menuOpen && (
@@ -91,10 +100,10 @@ export default function AssignmentCard({
 
             {/* Bottom Row */}
             <div className="flex items-center justify-between">
-                <p className="text-md text-gray-400">
+                <p className="md:text-md text-sm text-gray-400">
                     <span className="font-bold text-black">Assigned on</span> : {assignedOn}
                 </p>
-                <p className="text-md text-gray-400">
+                <p className="md:text-md text-sm text-gray-400">
                     <span className="font-bold text-black">Due</span> : {dueDate}
                 </p>
             </div>

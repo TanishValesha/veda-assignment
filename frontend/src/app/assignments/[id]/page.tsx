@@ -5,7 +5,8 @@ import { useParams } from 'next/navigation';
 import AppLayout from '../../../../components/layout/AppLayout';
 import { getQuestionPaper } from '../../../../services/api';
 import { useWebSocket } from '../../../../hooks/useWebSocket';
-import { FilePlusCorner, Loader2, RefreshCw } from 'lucide-react';
+import { Download, FilePlusCorner, Loader2, RefreshCw } from 'lucide-react';
+import { useMediaQuery } from 'react-responsive';
 
 type PageStatus = 'idle' | 'waiting' | 'active' | 'completed' | 'failed';
 
@@ -18,6 +19,7 @@ export default function AssignmentOutputPage() {
     const [gradeLevel, setGradeLevel] = useState('');
     const [paper, setPaper] = useState<any>(null);
     const [shouldConnectWs, setShouldConnectWs] = useState(false);
+    const isMobile = useMediaQuery({ maxWidth: 768 });
 
     const fetchPaper = useCallback(() => {
         getQuestionPaper(id)
@@ -99,7 +101,7 @@ export default function AssignmentOutputPage() {
                 {/* Top Banner */}
                 {status === 'completed' && pdfUrl && (
                     <div className="bg-black/90 text-white rounded-2xl px-6 py-4 flex flex-col items-start justify-between gap-4">
-                        <p className="text-lg leading-relaxed">
+                        <p className="text-md md:text-lg leading-tight md:leading-relaxed">
                             Certainly! Here are customized Question Paper for your{' '}
                             <span className="font-semibold">{gradeLevel} {subject}</span> classes.
                         </p>
@@ -108,10 +110,18 @@ export default function AssignmentOutputPage() {
                             href={pdfUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-shrink-0 flex items-center gap-2 bg-white text-gray-900 text-xs font-semibold px-4 py-2 rounded-full hover:bg-gray-100 transition-colors"
+                            className="flex flex-shrink-0 items-center justify-center gap-2 rounded-full bg-white text-gray-900 shadow-sm transition-colors hover:bg-gray-100"
                         >
-                            <FilePlusCorner size={16} />
-                            Download as PDF
+                            {isMobile ? (
+                                <span className="flex h-10 w-10 items-center justify-center">
+                                    <Download size={18} />
+                                </span>
+                            ) : (
+                                <span className="flex items-center gap-2 px-4 py-2 text-xs font-semibold">
+                                    <FilePlusCorner size={16} />
+                                    Download as PDF
+                                </span>
+                            )}
                         </a>
                     </div>
                 )}
@@ -126,7 +136,7 @@ export default function AssignmentOutputPage() {
                             />
 
                             <p className="text-sm font-medium text-gray-700 text-center">
-                                {status === 'idle' ? 'Loading...' : message}
+                                {status === 'idle' ? 'Generating Your Paper' : message}
                             </p>
                         </div>
                     </div>
@@ -148,7 +158,7 @@ export default function AssignmentOutputPage() {
 
                 {/* PDF Viewer */}
                 {status === 'completed' && pdfUrl && (
-                    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 ">
                         <iframe
                             src={`${pdfUrl}#toolbar=0&navpanes=0&view=FitH`}
                             className="w-full"

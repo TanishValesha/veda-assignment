@@ -1,14 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import AppLayout from '../../../components/layout/AppLayout';
 import AssignmentCard from '../../../components/assignment/AssignmentCard';
 import { deleteAssignment, getAllAssignments } from '../../../services/api';
-import { Search, SlidersHorizontal, Plus, Funnel, Loader2 } from 'lucide-react';
+import { Search, SlidersHorizontal, Plus, Funnel, Loader2, ArrowLeft } from 'lucide-react';
 import NoAssignment from '../../../components/assignment/NoAssignment';
 import { useAssignmentStore } from '../../../store/assignmentStore';
 import { toast } from "sonner";
+import { useMediaQuery } from "react-responsive";
 
 interface Assignment {
     _id: string;
@@ -23,6 +24,10 @@ export default function AssignmentsPage() {
     const [assignments, setAssignments] = useState<Assignment[]>([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true);
+    const pathname = usePathname();
+    const isMobile = useMediaQuery({
+        maxWidth: 768,
+    });
 
     const setAssignmentsCount = useAssignmentStore(
         (s) => s.setAssignmentsCount
@@ -65,20 +70,44 @@ export default function AssignmentsPage() {
 
     return (
         <AppLayout title="Assignment">
-            {
-                assignments.length !== 0 && !loading && (
+            {assignments.length !== 0 && !loading && (
+                isMobile ? (
+                    /* Mobile Header */
+                    <div className="flex items-center justify-center relative mb-6 px-4 pt-2">
+                        {/* Back Button */}
+                        {pathname !== "/" && pathname !== "/assignments" && (
+                            <button
+                                onClick={() => router.back()}
+                                className="absolute left-0 w-10 h-10 rounded-full bg-[#F3F3F3] flex items-center justify-center transition-transform active:scale-95"
+                            >
+                                <ArrowLeft size={24} className="text-black" />
+                            </button>
+                        )}
+
+                        {/* Title */}
+                        <h1 className="text-[18px] font-semibold text-[#222]">
+                            Assignments
+                        </h1>
+                    </div>
+                ) : (
+                    /* Desktop Header */
                     <div className="flex items-center gap-4 mb-8 px-8">
                         <div className="relative flex items-center justify-center">
-                            <div className="absolute w-5 h-5 rounded-full bg-green-300 opacity-75" />
+                            <div className="absolute w-5 h-5 rounded-full bg-green-300 opacity-75 animate-ping" />
                             <div className="relative w-2.5 h-2.5 rounded-full bg-green-400" />
                         </div>
+
                         <div>
-                            <h1 className="text-xl font-semibold text-gray-900">Assignments</h1>
-                            <p className="text-sm text-gray-400">Manage and create assignments for your classes.</p>
+                            <h1 className="text-xl font-semibold text-gray-900">
+                                Assignments
+                            </h1>
+                            <p className="text-sm text-gray-400">
+                                Manage and create assignments for your classes.
+                            </p>
                         </div>
                     </div>
                 )
-            }
+            )}
 
             <div className="w-full mx-auto mt-10 pb-10">
 
@@ -88,9 +117,9 @@ export default function AssignmentsPage() {
                     <div className="flex items-center justify-between gap-4 w-full px-2 py-4 rounded-[22px] bg-white border border-[#ECECEC] mb-5">
 
                         {/* Filter Button */}
-                        <button className="flex items-center gap-2 h-11 px-4 rounded-2xl text-md font-medium text-[#9A9A9A] hover:bg-white transition-colors">
+                        <button className="flex items-center gap-2 h-11 px-4 rounded-2xl text-sm md:text-md font-medium text-[#9A9A9A] hover:bg-white transition-colors">
                             <Funnel size={20} />
-                            Filter By
+                            Filter
                         </button>
 
                         {/* Search Input Container */}
@@ -120,7 +149,7 @@ export default function AssignmentsPage() {
                 ) : assignments.length === 0 ? (
                     <NoAssignment />
                 ) : (
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {filtered.map((a) => (
                             <AssignmentCard
                                 key={a._id}
@@ -137,7 +166,7 @@ export default function AssignmentsPage() {
 
             <div className="bottom-fade" />
 
-            {assignments.length !== 0 && !loading && (
+            {!isMobile && assignments.length !== 0 && !loading && (
                 <div className="fixed bottom-6 left-[calc(50%+120px)] -translate-x-1/2 z-120">
                     <button
                         onClick={() => router.push('/assignments/create')}

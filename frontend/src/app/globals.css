@@ -19,17 +19,6 @@ body {
   min-height: 100vh;
 }
 
-/* Hide default calendar icon for all custom date inputs */
-.no-native-icon::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-
 .bottom-fade {
   position: fixed;
   bottom: 0;
@@ -50,6 +39,10 @@ body {
 @media (max-width: 768px) {
   .bottom-fade {
     left: 0;
+  }
+
+  body {
+    background: #cecece;
   }
 
   /* assignment grid single column on mobile */

@@ -6,6 +6,8 @@ import AppLayout from '../../../../../components/layout/AppLayout';
 import { useAssignmentStore } from '../../../../../store/assignmentStore';
 import { createAssignment } from '../../../../../services/api';
 import { ArrowLeft, ArrowRight, ChevronDown } from 'lucide-react';
+import { useMediaQuery } from 'react-responsive';
+import { usePathname } from 'next/navigation';
 
 const GRADE_OPTIONS = [
     'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5',
@@ -24,6 +26,8 @@ export default function AssignmentDetailsPage() {
     const { form, setField, reset } = useAssignmentStore();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const isMobile = useMediaQuery({ maxWidth: 768 });
+    const pathname = usePathname();
 
     async function handleSubmit() {
         if (!form.title.trim()) return setError('Title is required');
@@ -49,18 +53,36 @@ export default function AssignmentDetailsPage() {
     return (
         <AppLayout title="Assignment" showBack>
             {/* Page Title */}
-            <div className="flex items-center gap-2 mb-8 px-8">
-                <div className="flex items-center gap-4 mb-8 px-8">
-                    <div className="relative flex items-center justify-center">
-                        <div className="absolute w-5 h-5 rounded-full bg-green-300 opacity-75" />
-                        <div className="relative w-2.5 h-2.5 rounded-full bg-green-400" />
+            {
+                isMobile ? (
+                    <div className="flex items-center justify-center relative mb-6 px-4 pt-2">
+                        {/* Back Button */}
+                        {pathname !== "/" && pathname !== "/assignments" && (
+                            <button
+                                onClick={() => router.back()}
+                                className="absolute left-0 w-10 h-10 rounded-full bg-[#F3F3F3] flex items-center justify-center transition-transform active:scale-95"
+                            >
+                                <ArrowLeft size={24} className="text-black" />
+                            </button>
+                        )}
+
+                        {/* Title */}
+                        <h1 className="text-[18px] font-semibold text-[#222]">
+                            Create Assignments
+                        </h1>
                     </div>
-                    <div>
-                        <h1 className="text-xl font-bold text-gray-900">Create Assignment</h1>
-                        <p className="text-sm text-gray-400">Set up a new assignment for your students</p>
-                    </div>
-                </div>
-            </div>
+                ) : (
+                    <div className="flex items-center gap-4 mb-8 px-8">
+                        <div className="relative flex items-center justify-center">
+                            <div className="absolute w-5 h-5 rounded-full bg-green-300 opacity-75" />
+                            <div className="relative w-2.5 h-2.5 rounded-full bg-green-400" />
+                        </div>
+                        <div>
+                            <h1 className="text-xl font-bold text-gray-900">Create Assignment</h1>
+                            <p className="text-sm text-gray-400">Set up a new assignment for your students</p>
+                        </div>
+                    </div>)
+            }
             <div className="max-w-6xl mx-auto mt-10 pb-10">
 
 
@@ -152,11 +174,11 @@ export default function AssignmentDetailsPage() {
                 )}
 
                 {/* Footer */}
-                <div className="flex justify-between mt-6">
+                <div className="flex justify-center items-center md:justify-between gap-2 md:gap-0 mt-5">
                     <button
                         type="button"
                         onClick={() => router.back()}
-                        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white border border-gray-200 text-md md:text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
                         style={{ boxShadow: '0 1px 4px 0 rgba(0,0,0,0.06)' }}
                     >
                         <ArrowLeft /> Previous
@@ -165,7 +187,7 @@ export default function AssignmentDetailsPage() {
                         type="button"
                         onClick={handleSubmit}
                         disabled={loading}
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-50"
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-black text-white text-md md:text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-50"
                     >
                         {loading ? 'Generating...' : 'Next'}<ArrowRight />
                     </button>

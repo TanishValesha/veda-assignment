@@ -9,6 +9,8 @@ import QuestionTypeRow from '../../../../components/assignment/QuestionTypeRow';
 import { useAssignmentStore } from '../../../../store/assignmentStore';
 import micIcon from '../../../../public/icons/mic.png';
 import { useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
+import { usePathname } from 'next/navigation';
 
 export default function CreateAssignmentPage() {
     const router = useRouter();
@@ -21,7 +23,8 @@ export default function CreateAssignmentPage() {
     } = useAssignmentStore();
 
     const [error, setError] = useState('');
-
+    const isMobile = useMediaQuery({ maxWidth: 768 });
+    const pathname = usePathname();
     const totalQuestions = form.questionConfig.reduce((s, q) => s + q.count, 0);
     const totalMarks = form.questionConfig.reduce((s, q) => s + q.count * q.marks, 0);
 
@@ -50,16 +53,37 @@ export default function CreateAssignmentPage() {
 
     return (
         <AppLayout title="Assignment" showBack>
-            <div className="flex items-center gap-4 mb-8 px-8">
-                <div className="relative flex items-center justify-center">
-                    <div className="absolute w-5 h-5 rounded-full bg-green-300 opacity-75" />
-                    <div className="relative w-2.5 h-2.5 rounded-full bg-green-400" />
-                </div>
-                <div>
-                    <h1 className="text-xl font-bold text-gray-900">Create Assignment</h1>
-                    <p className="text-sm text-gray-400">Set up a new assignment for your students</p>
-                </div>
-            </div>
+            {
+                isMobile ? (
+                    <div className="flex items-center justify-center relative mb-6 px-4 pt-2">
+                        {/* Back Button */}
+                        {pathname !== "/" && pathname !== "/assignments" && (
+                            <button
+                                onClick={() => router.back()}
+                                className="absolute left-0 w-10 h-10 rounded-full bg-[#F3F3F3] flex items-center justify-center transition-transform active:scale-95"
+                            >
+                                <ArrowLeft size={24} className="text-black" />
+                            </button>
+                        )}
+
+                        {/* Title */}
+                        <h1 className="text-[18px] font-semibold text-[#222]">
+                            Create Assignments
+                        </h1>
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-4 mb-8 px-8">
+                        <div className="relative flex items-center justify-center">
+                            <div className="absolute w-5 h-5 rounded-full bg-green-300 opacity-75" />
+                            <div className="relative w-2.5 h-2.5 rounded-full bg-green-400" />
+                        </div>
+                        <div>
+                            <h1 className="text-xl font-bold text-gray-900">Create Assignment</h1>
+                            <p className="text-sm text-gray-400">Set up a new assignment for your students</p>
+                        </div>
+                    </div>)
+            }
+
             <div className="max-w-6xl mx-auto mt-10 pb-10">
 
 
@@ -81,7 +105,7 @@ export default function CreateAssignmentPage() {
 
                     {/* File Upload */}
                     <FileUpload onFileSelect={(file) => console.log(file)} />
-                    <p className="text-sm text-gray-400 text-center -mt-3">
+                    <p className="text-md md:text-sm text-gray-400 text-center -mt-3">
                         Upload images of your preferred document/image
                     </p>
 
@@ -101,12 +125,18 @@ export default function CreateAssignmentPage() {
                     </div>
 
                     {/* Question Type Header */}
-                    <div className="grid items-center" style={{ gridTemplateColumns: '1fr 24px 100px 100px' }}>
-                        <span className="text-md font-semibold text-black">Question Type</span>
-                        <span />
-                        <span className="text-md font-semibold text-black text-center">No. of Questions</span>
-                        <span className="text-md font-semibold text-black text-center">Marks</span>
-                    </div>
+                    {isMobile ? (
+                        <div className="flex items-center">
+                            <span className="text-md font-semibold text-black">Question Type</span>
+                        </div>
+                    ) : (
+                        <div className="grid items-center" style={{ gridTemplateColumns: '1fr 24px 100px 100px' }}>
+                            <span className="text-md font-semibold text-black">Question Type</span>
+                            <span />
+                            <span className="text-md font-semibold text-black text-center">No. of Questions</span>
+                            <span className="text-md font-semibold text-black text-center">Marks</span>
+                        </div>)
+                    }
 
                     {/* Question Rows */}
                     <div className="space-y-2.5">
@@ -125,12 +155,12 @@ export default function CreateAssignmentPage() {
                     <button
                         type="button"
                         onClick={addQuestionConfig}
-                        className="flex items-center gap-2 text-sm text-gray-700 font-medium hover:text-gray-900 transition-colors"
+                        className="flex items-center gap-2 text-sm  font-medium hover:text-gray-900 transition-colors"
                     >
                         <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center font-bold">
                             <Plus size={20} className="text-white" />
                         </div>
-                        Add Question Type
+                        <span className='font-bold'>Add Question Type</span>
                     </button>
 
                     {/* Totals */}
@@ -147,7 +177,6 @@ export default function CreateAssignmentPage() {
                     <div>
                         <label className="text-md font-semibold text-black mb-1.5 block">
                             Additional Information{' '}
-                            <span className="text-black font-bold">(For better output)</span>
                         </label>
                         <div className="relative">
                             <textarea
@@ -180,11 +209,11 @@ export default function CreateAssignmentPage() {
                 )}
 
                 {/* Footer */}
-                <div className="flex justify-between mt-5">
+                <div className="flex justify-center items-center md:justify-between mt-5 gap-2 md:gap-0">
                     <button
                         type="button"
                         onClick={() => router.back()}
-                        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white border border-gray-200 text-md md:text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
                         style={{ boxShadow: '0 1px 4px 0 rgba(0,0,0,0.06)' }}
                     >
                         <ArrowLeft />
@@ -193,7 +222,7 @@ export default function CreateAssignmentPage() {
                     <button
                         type="button"
                         onClick={handleNext}
-                        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors"
+                        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-black text-white text-md md:text-sm font-medium hover:bg-gray-800 transition-colors"
                     >
                         Next<ArrowRight />
                     </button>

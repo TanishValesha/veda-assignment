@@ -164,7 +164,7 @@ export default function AssignmentsPage() {
                 )}
             </div>
 
-            <div className="bottom-fade" />
+            {!isMobile && <div className="bottom-fade" />}
 
             {!isMobile && assignments.length !== 0 && !loading && (
                 <div className="fixed bottom-6 left-[calc(50%+120px)] -translate-x-1/2 z-120">

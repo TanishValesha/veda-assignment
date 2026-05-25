@@ -16,20 +16,16 @@ interface UseWebSocketProps {
   assignmentId: string | null;
   onMessage: (msg: WsMessage) => void;
   skip?: boolean;
+  onConnect?: () => void;
 }
 
 export function useWebSocket({
   assignmentId,
   onMessage,
   skip,
+  onConnect,
 }: UseWebSocketProps) {
   const wsRef = useRef<WebSocket | null>(null);
-
-  console.log({
-    assignmentId,
-    onMessage,
-    skip,
-  });
 
   const connect = useCallback(() => {
     if (!assignmentId || skip) return;
@@ -40,7 +36,10 @@ export function useWebSocket({
 
     console.log("Connecting to:", ws.url);
 
-    ws.onopen = () => console.log("WS connected");
+    ws.onopen = () => {
+      console.log("WS connected");
+      onConnect?.();
+    };
 
     ws.onmessage = (e) => {
       try {
@@ -55,7 +54,7 @@ export function useWebSocket({
     ws.onclose = () => console.log("WS disconnected");
 
     wsRef.current = ws;
-  }, [assignmentId, onMessage, skip]);
+  }, [assignmentId, onMessage, skip, onConnect]);
 
   useEffect(() => {
     connect();

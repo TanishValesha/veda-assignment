@@ -19,6 +19,25 @@ export default function AssignmentOutputPage() {
     const [paper, setPaper] = useState<any>(null);
     const [shouldConnectWs, setShouldConnectWs] = useState(false);
 
+    const fetchPaper = useCallback(() => {
+        getQuestionPaper(id)
+            .then((res) => {
+                if (res.data?.pdfUrl) {
+                    setPaper(res.data);
+                    setPdfUrl(res.data.pdfUrl);
+                    setSubject(res.data.subject || '');
+                    setGradeLevel(res.data.gradeLevel || '');
+                    setStatus('completed');
+                }
+            })
+            .catch(() => { });
+    }, [id]);
+
+    // fetch on mount
+    useEffect(() => {
+        fetchPaper();
+    }, [fetchPaper]);
+
     // on refresh, try fetching existing paper
     useEffect(() => {
         getQuestionPaper(id)
@@ -60,7 +79,7 @@ export default function AssignmentOutputPage() {
         }
     }, []);
 
-    useWebSocket({ assignmentId: id, onMessage: handleWsMessage, skip: !shouldConnectWs });
+    useWebSocket({ assignmentId: id, onMessage: handleWsMessage, skip: !shouldConnectWs, onConnect: fetchPaper });
 
     return (
         <AppLayout title="Assignment" showBack>

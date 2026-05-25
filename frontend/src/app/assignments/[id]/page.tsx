@@ -7,6 +7,7 @@ import { getQuestionPaper } from '../../../../services/api';
 import { useWebSocket } from '../../../../hooks/useWebSocket';
 import { Download, FilePlusCorner, Loader2, RefreshCw } from 'lucide-react';
 import { useMediaQuery } from 'react-responsive';
+import QuestionPaper from '../../../../components/paper/QuestionPaper';
 
 type PageStatus = 'idle' | 'waiting' | 'active' | 'completed' | 'failed';
 
@@ -157,7 +158,7 @@ export default function AssignmentOutputPage() {
                 )}
 
                 {/* PDF Viewer */}
-                {status === 'completed' && pdfUrl && (
+                {/* {status === 'completed' && pdfUrl && (
                     <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 ">
                         <iframe
                             src={`${pdfUrl}#toolbar=0&navpanes=0&view=FitH`}
@@ -166,6 +167,10 @@ export default function AssignmentOutputPage() {
                             title="Question Paper"
                         />
                     </div>
+                )} */}
+
+                {status === 'completed' && paper && (
+                    <QuestionPaper paper={paper} />
                 )}
 
             </div>

@@ -24,3 +24,8 @@ export async function getAllAssignments() {
   const res = await api.get("/api/assignments");
   return res.data;
 }
+
+export async function deleteAssignment(id: string) {
+  const res = await api.delete(`/api/assignments/${id}`);
+  return res.data;
+}

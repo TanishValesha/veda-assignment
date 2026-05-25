@@ -96,3 +96,23 @@ export async function getAllAssignments(req: Request, res: Response) {
     return sendError(res, error.message, 500);
   }
 }
+
+// Delete an assignment and its paper
+export async function deleteAssignment(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+
+    const assignment = await Assignment.findById(id);
+    if (!assignment) return sendError(res, "Assignment not found", 404);
+
+    await QuestionPaper.deleteOne({ assignmentId: id });
+
+    await Assignment.findByIdAndDelete(id);
+
+    await redisClient.del(`paper:${id}`);
+
+    return sendSuccess(res, null, "Assignment deleted successfully");
+  } catch (err: any) {
+    return sendError(res, err.message);
+  }
+}

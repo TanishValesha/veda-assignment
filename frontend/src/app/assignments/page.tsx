@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AppLayout from '../../../components/layout/AppLayout';
 import AssignmentCard from '../../../components/assignment/AssignmentCard';
-import { getAllAssignments } from '../../../services/api';
+import { deleteAssignment, getAllAssignments } from '../../../services/api';
 import { Search, SlidersHorizontal, Plus, Funnel } from 'lucide-react';
 import NoAssignment from '../../../components/assignment/NoAssignment';
 import { useAssignmentStore } from '../../../store/assignmentStore';
+import { toast } from "sonner";
 
 interface Assignment {
     _id: string;
@@ -39,9 +40,18 @@ export default function AssignmentsPage() {
             .finally(() => setLoading(false));
     }, []);
 
-    function handleDelete(id: string) {
-        setAssignments((prev) => prev.filter((a) => a._id !== id));
-        // API call to delete the assignment
+    async function handleDelete(id: string) {
+        try {
+            await deleteAssignment(id);
+            setAssignments((prev) => prev.filter((a) => a._id !== id));
+            toast.success("Assignment deleted successfully", {
+                description: "The document has been removed permanently.",
+            });
+        } catch {
+            toast.error("Failed to delete assignment", {
+                description: "Something went wrong. Please try again.",
+            });
+        }
     }
 
     function formatDate(dateStr: string) {

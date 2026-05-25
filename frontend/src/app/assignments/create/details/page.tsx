@@ -36,8 +36,8 @@ export default function AssignmentDetailsPage() {
         try {
             const res = await createAssignment(form);
             const assignmentId = res.data.assignmentId;
-            reset();
             router.push(`/assignments/${assignmentId}`);
+            reset();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             setError(err?.response?.data?.error || 'Something went wrong');

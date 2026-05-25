@@ -14,7 +14,7 @@ const GRADE_OPTIONS = [
 ];
 
 const SUBJECT_OPTIONS = [
-    'Mathematics', 'Science', 'English', 'Hindi',
+    'Mathematics', 'Science', 'English',
     'Social Studies', 'Physics', 'Chemistry', 'Biology',
     'History', 'Geography', 'Computer Science',
 ];

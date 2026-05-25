@@ -135,22 +135,19 @@ export default function AssignmentsPage() {
                 )}
             </div>
 
-            <div className="fixed bottom-0 left-74 w-full h-24 z-100 pointer-events-none bg-gradient-to-t from-white/90 to-transparent backdrop-blur-md" />
+            <div className="bottom-fade" />
 
-            {/* Floating Create Button */}
-            {
-                assignments.length !== 0 && !loading && (
-                    <div className="fixed bottom-6 left-[calc(50%+120px)] -translate-x-1/2 z-120">
-                        <button
-                            onClick={() => router.push('/assignments/create')}
-                            className="flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-full text-md font-semibold transition-all shadow-lg cursor-pointer hover:scale-102"
-                        >
-                            <Plus size={24} />
-                            Create Assignment
-                        </button>
-                    </div>
-                )
-            }
+            {assignments.length !== 0 && !loading && (
+                <div className="fixed bottom-6 left-[calc(50%+120px)] -translate-x-1/2 z-120">
+                    <button
+                        onClick={() => router.push('/assignments/create')}
+                        className="flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-full text-md font-semibold transition-all shadow-lg cursor-pointer hover:scale-105"
+                    >
+                        <Plus size={24} />
+                        Create Assignment
+                    </button>
+                </div>
+            )}
 
         </AppLayout>
     );

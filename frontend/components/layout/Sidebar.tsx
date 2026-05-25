@@ -16,11 +16,11 @@ import { Settings } from 'lucide-react';
 import { useAssignmentStore } from '../../store/assignmentStore';
 
 const navItems = [
-    { label: 'Home', icon: homeIcon, href: '/' },
-    { label: 'My Groups', icon: groupsIcon, href: '/groups' },
-    { label: 'Assignments', icon: assignmentsIcon, href: '/assignments' },
-    { label: "AI Teacher's Toolkit", icon: toolkitIcon, href: '/toolkit' },
-    { label: 'My Library', icon: libraryIcon, href: '/library' },
+    { label: 'Home', icon: homeIcon, href: '/', active: true },
+    { label: 'My Groups', icon: groupsIcon, href: '/groups', active: false },
+    { label: 'Assignments', icon: assignmentsIcon, href: '/assignments', active: true },
+    { label: "AI Teacher's Toolkit", icon: toolkitIcon, href: '/toolkit', active: false },
+    { label: 'My Library', icon: libraryIcon, href: '/library', active: false },
 ];
 
 export default function Sidebar() {
@@ -67,9 +67,41 @@ export default function Sidebar() {
 
             {/* Nav Items */}
             <nav className="flex-1 px-3 space-y-0.5">
-                {navItems.map(({ label, icon, href }) => {
+                {navItems.map(({ label, icon, href, active }) => {
                     const isActive = pathname === href ||
                         (href === '/assignments' && pathname.startsWith('/assignments'));
+
+                    if (!active) {
+                        return (
+                            <div key={href} >
+                                <div
+                                    className={`flex items-center gap-3 px-6 py-2.5 rounded-xl text-md cursor-pointer transition-all duration-150
+                  ${isActive
+                                            ? 'bg-gray-100 text-gray-900 font-semibold'
+                                            : 'text-gray-500 font-medium hover:bg-gray-50 hover:text-gray-800'
+                                        }`}
+                                >
+                                    <Image
+                                        src={icon}
+                                        alt={label}
+                                        width={20}
+                                        height={20}
+                                        className={`object-contain transition-opacity ${isActive ? 'opacity-100' : 'opacity-50'
+                                            }`}
+                                    />
+                                    {label}
+
+                                    {label === "Assignments" && (
+                                        <div className='pl-8'>
+                                            <div className="min-w-[22px] h-[22px] flex px-4 py-1 items-center justify-center rounded-full bg-[#FF6A2B] text-white text-sm font-semibold leading-none">
+                                                {assignmentsCount}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )
+                    }
 
                     return (
                         <Link key={href} href={href}>

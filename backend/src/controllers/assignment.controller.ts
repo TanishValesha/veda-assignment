@@ -66,10 +66,10 @@ export async function getQuestionPaper(req: Request, res: Response) {
   try {
     const { id } = req.params;
 
-    const cached = await redisClient.get(`paper:${id}`);
-    if (cached) {
-      return sendSuccess(res, JSON.parse(cached), "Fetched from cache");
-    }
+    // const cached = await redisClient.get(`paper:${id}`);
+    // if (cached) {
+    //   return sendSuccess(res, JSON.parse(cached), "Fetched from cache");
+    // }
 
     const paper = await QuestionPaper.findOne({ assignmentId: id });
     if (!paper)

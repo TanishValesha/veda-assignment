@@ -50,7 +50,10 @@ export default function AssignmentDetailsPage() {
         <AppLayout title="Assignment" showBack>
             {/* Page Title */}
             <div className="flex items-center gap-2 mb-8 px-8">
-                <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                <div className="relative flex items-center justify-center">
+                    <div className="absolute w-5 h-5 rounded-full bg-green-300 opacity-75" />
+                    <div className="relative w-2.5 h-2.5 rounded-full bg-green-400" />
+                </div>
                 <div>
                     <h1 className="text-md font-bold text-gray-900">Create Assignment</h1>
                     <p className="text-sm text-gray-400">Set up a new assignment for your students</p>

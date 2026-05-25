@@ -3,6 +3,7 @@ import { CreateAssignmentDTO, QuestionConfig } from "../types/index";
 
 interface AssignmentStore {
   form: CreateAssignmentDTO;
+  assignmentsCount: number;
   setField: <K extends keyof CreateAssignmentDTO>(
     key: K,
     value: CreateAssignmentDTO[K],
@@ -10,6 +11,7 @@ interface AssignmentStore {
   addQuestionConfig: () => void;
   removeQuestionConfig: (index: number) => void;
   updateQuestionConfig: (index: number, data: Partial<QuestionConfig>) => void;
+  setAssignmentsCount: (count: number) => void;
   reset: () => void;
 }
 
@@ -27,6 +29,12 @@ const defaultForm: CreateAssignmentDTO = {
 
 export const useAssignmentStore = create<AssignmentStore>((set) => ({
   form: defaultForm,
+  assignmentsCount: 0,
+
+  setAssignmentsCount: (count: number) =>
+    set({
+      assignmentsCount: count,
+    }),
 
   setField: (key, value) => set((s) => ({ form: { ...s.form, [key]: value } })),
 

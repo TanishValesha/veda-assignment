@@ -13,6 +13,7 @@ import libraryIcon from '../../public/icons/library.png';
 import sparklesIcon from '../../public/icons/sparkles.png';
 import schoolAvatar from '../../public/icons/avatar.png';
 import { Settings } from 'lucide-react';
+import { useAssignmentStore } from '../../store/assignmentStore';
 
 const navItems = [
     { label: 'Home', icon: homeIcon, href: '/' },
@@ -24,6 +25,9 @@ const navItems = [
 
 export default function Sidebar() {
     const pathname = usePathname();
+    const assignmentsCount = useAssignmentStore(
+        (s) => s.assignmentsCount
+    );
 
     return (
         <aside
@@ -85,6 +89,14 @@ export default function Sidebar() {
                                         }`}
                                 />
                                 {label}
+
+                                {label === "Assignments" && (
+                                    <div className='pl-8'>
+                                        <div className="min-w-[22px] h-[22px] flex px-4 py-1 items-center justify-center rounded-full bg-[#FF6A2B] text-white text-sm font-semibold leading-none">
+                                            {assignmentsCount}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </Link>
                     );

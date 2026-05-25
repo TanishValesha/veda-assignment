@@ -57,7 +57,7 @@ export default function AssignmentOutputPage() {
     useWebSocket({ assignmentId: id, onMessage: handleWsMessage, skip: status === 'completed' });
 
     return (
-        <AppLayout title="Create New" showBack>
+        <AppLayout title="Assignment" showBack>
             <div className="max-w-4xl mx-auto space-y-4">
 
                 {/* Top Banner */}

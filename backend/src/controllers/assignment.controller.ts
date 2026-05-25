@@ -66,16 +66,19 @@ export async function getQuestionPaper(req: Request, res: Response) {
   try {
     const { id } = req.params;
 
-    // const cached = await redisClient.get(`paper:${id}`);
-    // if (cached) {
-    //   return sendSuccess(res, JSON.parse(cached), "Fetched from cache");
-    // }
+    const cached = await redisClient.get(`paper:${id}`);
+    if (cached) {
+      return sendSuccess(res, JSON.parse(cached), "Fetched from cache");
+    }
 
     const paper = await QuestionPaper.findOne({ assignmentId: id });
     if (!paper)
       return sendError(res, "Paper not found or not generated yet", 404);
 
-    await redisClient.setEx(`paper:${id}`, 3600, JSON.stringify(paper));
+    // cache when whole paper is available
+    if (paper.pdfUrl) {
+      await redisClient.setEx(`paper:${id}`, 86400, JSON.stringify(paper));
+    }
 
     return sendSuccess(res, paper, "Paper fetched successfully");
   } catch (err: any) {

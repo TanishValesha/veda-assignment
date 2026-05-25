@@ -6,6 +6,7 @@ import { QuestionPaper } from "../models/QuestionPaper";
 import { wsManager } from "../ws/wsManager";
 import { CreateAssignmentDTO } from "../types";
 import { generatePDF } from "../services/pdfService";
+import { redisClient } from "../config/redis";
 
 export interface AssignmentJobData {
   assignmentId: string;
@@ -37,6 +38,9 @@ export function startWorker() {
         const pdfUrl = await generatePDF(paper);
 
         await QuestionPaper.findByIdAndUpdate(savedPaper._id, { pdfUrl });
+
+        // invalidate cache
+        await redisClient.del(`paper:${assignmentId}`);
 
         // 5. Update assignment status
         await Assignment.findByIdAndUpdate(assignmentId, {

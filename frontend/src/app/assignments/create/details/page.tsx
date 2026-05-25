@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import AppLayout from '../../../../../components/layout/AppLayout';
 import { useAssignmentStore } from '../../../../../store/assignmentStore';
 import { createAssignment } from '../../../../../services/api';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronDown } from 'lucide-react';
 
 const GRADE_OPTIONS = [
     'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5',
@@ -50,13 +50,15 @@ export default function AssignmentDetailsPage() {
         <AppLayout title="Assignment" showBack>
             {/* Page Title */}
             <div className="flex items-center gap-2 mb-8 px-8">
-                <div className="relative flex items-center justify-center">
-                    <div className="absolute w-5 h-5 rounded-full bg-green-300 opacity-75" />
-                    <div className="relative w-2.5 h-2.5 rounded-full bg-green-400" />
-                </div>
-                <div>
-                    <h1 className="text-md font-bold text-gray-900">Create Assignment</h1>
-                    <p className="text-sm text-gray-400">Set up a new assignment for your students</p>
+                <div className="flex items-center gap-4 mb-8 px-8">
+                    <div className="relative flex items-center justify-center">
+                        <div className="absolute w-5 h-5 rounded-full bg-green-300 opacity-75" />
+                        <div className="relative w-2.5 h-2.5 rounded-full bg-green-400" />
+                    </div>
+                    <div>
+                        <h1 className="text-xl font-bold text-gray-900">Create Assignment</h1>
+                        <p className="text-sm text-gray-400">Set up a new assignment for your students</p>
+                    </div>
                 </div>
             </div>
             <div className="max-w-6xl mx-auto mt-10 pb-10">
@@ -98,14 +100,16 @@ export default function AssignmentDetailsPage() {
                             <select
                                 value={form.subject}
                                 onChange={(e) => setField('subject', e.target.value)}
-                                className="w-full focus:outline-none appearance-none border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 bg-white pr-8"
+                                className="w-full appearance-none bg-[#F5F5F5] border-none rounded-full px-5 py-3 pr-10 text-sm font-medium text-[#2C2C2C] focus:outline-none cursor-pointer"
                             >
                                 <option value="">Select Subject</option>
                                 {SUBJECT_OPTIONS.map((s) => (
                                     <option key={s} value={s}>{s}</option>
                                 ))}
                             </select>
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs">▾</span>
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-black">
+                                <ChevronDown size={16} strokeWidth={2.2} />
+                            </span>
                         </div>
                     </div>
 
@@ -118,22 +122,34 @@ export default function AssignmentDetailsPage() {
                             <select
                                 value={form.gradeLevel}
                                 onChange={(e) => setField('gradeLevel', e.target.value)}
-                                className="w-full appearance-none border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 bg-white focus:outline-none pr-8"
+                                className="w-full appearance-none bg-[#F5F5F5] border-none rounded-full px-5 py-3 pr-10 text-sm font-medium text-[#2C2C2C] focus:outline-none cursor-pointer"
                             >
                                 <option value="">Select Grade</option>
                                 {GRADE_OPTIONS.map((g) => (
                                     <option key={g} value={g}>{g}</option>
                                 ))}
                             </select>
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs">▾</span>
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-black">
+                                <ChevronDown size={16} strokeWidth={2.2} />
+                            </span>
                         </div>
                     </div>
-
-                    {/* Error */}
-                    {error && (
-                        <p className="text-xs text-red-500 bg-red-50 px-3 py-2 rounded-lg">{error}</p>
-                    )}
                 </div>
+
+                {error && (
+                    <div className="flex items-start gap-3 mt-4 rounded-2xl border border-red-200 bg-red-50/80 px-4 py-3 animate-in fade-in slide-in-from-top-1 duration-200">
+                        <div className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-red-500" />
+
+                        <div>
+                            <p className="text-sm font-semibold text-red-700">
+                                Validation Error
+                            </p>
+                            <p className="mt-0.5 text-sm text-red-600">
+                                {error}
+                            </p>
+                        </div>
+                    </div>
+                )}
 
                 {/* Footer */}
                 <div className="flex justify-between mt-6">

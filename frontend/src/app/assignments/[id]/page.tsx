@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import AppLayout from '../../../../components/layout/AppLayout';
 import { getQuestionPaper } from '../../../../services/api';
 import { useWebSocket } from '../../../../hooks/useWebSocket';
-import { Download, Loader2, RefreshCw } from 'lucide-react';
+import { FilePlusCorner, Loader2, RefreshCw } from 'lucide-react';
 
 type PageStatus = 'waiting' | 'active' | 'completed' | 'failed';
 
@@ -58,12 +58,12 @@ export default function AssignmentOutputPage() {
 
     return (
         <AppLayout title="Assignment" showBack>
-            <div className="max-w-4xl mx-auto space-y-4">
+            <div className="w-full mx-auto space-y-4">
 
                 {/* Top Banner */}
                 {status === 'completed' && pdfUrl && (
-                    <div className="bg-gray-900 text-white rounded-2xl px-6 py-4 flex items-start justify-between gap-4">
-                        <p className="text-sm leading-relaxed">
+                    <div className="bg-black/90 text-white rounded-2xl px-6 py-4 flex flex-col items-start justify-between gap-4">
+                        <p className="text-lg leading-relaxed">
                             Certainly! Here are customized Question Paper for your{' '}
                             <span className="font-semibold">{gradeLevel} {subject}</span> classes.
                         </p>
@@ -74,7 +74,7 @@ export default function AssignmentOutputPage() {
                             rel="noopener noreferrer"
                             className="flex-shrink-0 flex items-center gap-2 bg-white text-gray-900 text-xs font-semibold px-4 py-2 rounded-full hover:bg-gray-100 transition-colors"
                         >
-                            <Download size={13} />
+                            <FilePlusCorner size={16} />
                             Download as PDF
                         </a>
                     </div>
@@ -107,7 +107,7 @@ export default function AssignmentOutputPage() {
                 {status === 'completed' && pdfUrl && (
                     <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
                         <iframe
-                            src={pdfUrl}
+                            src={`${pdfUrl}#toolbar=0&navpanes=0&view=FitH`}
                             className="w-full"
                             style={{ height: '85vh' }}
                             title="Question Paper"

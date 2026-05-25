@@ -1,14 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Plus, Mic, Calendar, ChevronLast, ChevronLeft, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Plus, ArrowLeft, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import AppLayout from '../../../../components/layout/AppLayout';
 import FileUpload from '../../../../components/assignment/FileUpload';
 import QuestionTypeRow from '../../../../components/assignment/QuestionTypeRow';
 import { useAssignmentStore } from '../../../../store/assignmentStore';
-import calendarIcon from '../../../../public/icons/calendar.png';
 import micIcon from '../../../../public/icons/mic.png';
+import { useState } from 'react';
 
 export default function CreateAssignmentPage() {
     const router = useRouter();
@@ -20,12 +20,22 @@ export default function CreateAssignmentPage() {
         updateQuestionConfig,
     } = useAssignmentStore();
 
+    const [error, setError] = useState('');
+
     const totalQuestions = form.questionConfig.reduce((s, q) => s + q.count, 0);
     const totalMarks = form.questionConfig.reduce((s, q) => s + q.count * q.marks, 0);
 
     function handleNext() {
-        if (!form.dueDate) return alert('Please select a due date');
-        if (form.questionConfig.length === 0) return alert('Add at least one question type');
+        if (!form.dueDate) {
+            return setError('Please select a due date');
+        }
+
+        if (form.questionConfig.length === 0) {
+            return setError('Add at least one question type');
+        }
+
+        setError('');
+
         router.push('/assignments/create/details');
     }
 
@@ -143,6 +153,21 @@ export default function CreateAssignmentPage() {
                         </div>
                     </div>
                 </div>
+
+                {error && (
+                    <div className="flex items-start gap-3 mt-4 rounded-2xl border border-red-200 bg-red-50/80 px-4 py-3 animate-in fade-in slide-in-from-top-1 duration-200">
+                        <div className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-red-500" />
+
+                        <div>
+                            <p className="text-sm font-semibold text-red-700">
+                                Validation Error
+                            </p>
+                            <p className="mt-0.5 text-sm text-red-600">
+                                {error}
+                            </p>
+                        </div>
+                    </div>
+                )}
 
                 {/* Footer */}
                 <div className="flex justify-between mt-5">

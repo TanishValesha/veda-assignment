@@ -16,12 +16,14 @@ export default function AssignmentOutputPage() {
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
     const [subject, setSubject] = useState('');
     const [gradeLevel, setGradeLevel] = useState('');
+    const [paper, setPaper] = useState<any>(null);
 
     // on refresh, try fetching existing paper
     useEffect(() => {
         getQuestionPaper(id)
             .then((res) => {
                 if (res.data) {
+                    setPaper(res.data);
                     setPdfUrl(res.data.pdfUrl || null);
                     setSubject(res.data.subject || '');
                     setGradeLevel(res.data.gradeLevel || '');
@@ -29,7 +31,7 @@ export default function AssignmentOutputPage() {
                 }
             })
             .catch(() => {
-                // not ready yet, wait for WS
+                // paper not ready yet, WS will handle it
             });
     }, [id]);
 
@@ -52,7 +54,7 @@ export default function AssignmentOutputPage() {
         }
     }, []);
 
-    useWebSocket({ assignmentId: id, onMessage: handleWsMessage });
+    useWebSocket({ assignmentId: id, onMessage: handleWsMessage, skip: status === 'completed' });
 
     return (
         <AppLayout title="Create New" showBack>

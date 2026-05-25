@@ -33,6 +33,7 @@ const QuestionPaperSchema = new Schema<IQuestionPaper>(
     totalMarks: Number,
     sections: [SectionSchema],
     generatedAt: String,
+    pdfUrl: String,
   },
   { timestamps: true },
 );

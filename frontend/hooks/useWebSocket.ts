@@ -14,17 +14,30 @@ interface WsMessage {
 interface UseWebSocketProps {
   assignmentId: string | null;
   onMessage: (msg: WsMessage) => void;
+  skip?: boolean;
 }
 
-export function useWebSocket({ assignmentId, onMessage }: UseWebSocketProps) {
+export function useWebSocket({
+  assignmentId,
+  onMessage,
+  skip,
+}: UseWebSocketProps) {
   const wsRef = useRef<WebSocket | null>(null);
 
+  console.log({
+    assignmentId,
+    onMessage,
+    skip,
+  });
+
   const connect = useCallback(() => {
-    if (!assignmentId) return;
+    if (!assignmentId || skip) return;
 
     const ws = new WebSocket(
       `${process.env.NEXT_PUBLIC_WS_URL}?assignmentId=${assignmentId}`,
     );
+
+    console.log("Connecting to:", ws.url);
 
     ws.onopen = () => console.log("WS connected");
 
@@ -41,7 +54,7 @@ export function useWebSocket({ assignmentId, onMessage }: UseWebSocketProps) {
     ws.onclose = () => console.log("WS disconnected");
 
     wsRef.current = ws;
-  }, [assignmentId, onMessage]);
+  }, [assignmentId, onMessage, skip]);
 
   useEffect(() => {
     connect();

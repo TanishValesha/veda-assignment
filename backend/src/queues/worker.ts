@@ -33,8 +33,10 @@ export function startWorker() {
         const paper = await generateQuestionPaper(dto, assignmentId);
 
         // 4. Save to MongoDB
-        await QuestionPaper.create(paper);
+        const savedPaper = await QuestionPaper.create(paper);
         const pdfUrl = await generatePDF(paper);
+
+        await QuestionPaper.findByIdAndUpdate(savedPaper._id, { pdfUrl });
 
         // 5. Update assignment status
         await Assignment.findByIdAndUpdate(assignmentId, {

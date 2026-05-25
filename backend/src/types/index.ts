@@ -51,6 +51,7 @@ export interface GeneratedPaper {
   timeAllowed: string; // "2 hours"
   totalMarks: number; // total marks for the entire paper
   sections: Section[]; // array of sections in the paper
+  pdfUrl?: string; // URL to the generated PDF (optional, can be added after generation)
   generatedAt: string; // timestamp of when the paper was generated
 }
 

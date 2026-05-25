@@ -144,7 +144,7 @@ export default function AssignmentsPage() {
                 {/* Grid */}
                 {loading ? (
                     <div className="flex h-screen pb-20 text-center justify-center items-center">
-                        <Loader2 size={48} className="text-orange-400 animate-spin" />
+                        <Loader2 size={48} className="text-[#FF7A3D] animate-spin" />
                     </div>
                 ) : assignments.length === 0 ? (
                     <NoAssignment />

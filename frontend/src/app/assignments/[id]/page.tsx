@@ -132,7 +132,7 @@ export default function AssignmentOutputPage() {
                         <div className="bg-transparent rounded-2xl px-16 flex flex-col items-center justify-center gap-4 pb-20">
                             <Loader2
                                 size={48}
-                                className="text-orange-500 animate-spin"
+                                className="text-[#FF7A3D] animate-spin"
                             />
 
                             <p className="text-sm font-medium text-gray-700 text-center">

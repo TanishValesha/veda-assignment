@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Bell, Menu } from 'lucide-react';
-import logo from '../../public/icons/mobile_logo.png';
+import logo from '../../public/icons/mobile_logo_better.png';
 import userAvatar from '../../public/icons/avatar.png';
 
 export default function MobileHeader() {
@@ -15,7 +15,7 @@ export default function MobileHeader() {
                     src={logo}
                     alt="VedaAI"
                     width={28}
-                    className="object-contain"
+                    className="object-contain rounded-md"
                 />
                 <span className="font-bold text-gray-900 text-xl md:text-2xl tracking-tight">VedaAI</span>
             </div>
